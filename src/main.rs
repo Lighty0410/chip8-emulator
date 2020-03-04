@@ -1,3 +1,3 @@
-fn main() {
-    println!("Hello, nes emulator!!!");
-}
+mod chip8;
+
+fn main() {}
