@@ -1,5 +1,2 @@
 pub mod cpu;
-
-// fn do_smt() {
-//     pri
-// }
+pub mod opcodes_exec;
