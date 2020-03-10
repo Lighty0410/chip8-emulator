@@ -1,3 +1,2 @@
-# rusty-nest-emulator
-Nes emulator written on Rust (WIP) for education purposes only. 
-Might be amazing if someone gonna review my code >:(
+Yet another chip8 emulator for education purposes only. 
+This codebase consists tons of overhead and it's bad written. It's done to let the contributor learn systems/Rust better.
