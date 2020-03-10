@@ -21,17 +21,17 @@ impl Chip8 {
 
     // Jump to location nnn.
     //The interpreter sets the program counter to nnn.
-    pub(super) fn exec_1nnn(&mut self, nnn: &usize) {
-        self.pc = *nnn;
+    pub(super) fn exec_1nnn(&mut self, nnn: usize) {
+        self.pc = nnn;
     }
 
     // The interpreter increments the stack pointer,
     // then puts the current PC on the top of the stack.
     // The PC is then set to nnn.
-    pub(super) fn exec_2nnn(&mut self, nnn: &usize) {
+    pub(super) fn exec_2nnn(&mut self, nnn: usize) {
         self.stack[self.sp] = (self.pc + 2) as u16;
         self.sp += 1;
-        self.pc = *nnn;
+        self.pc = nnn;
     }
 
     // The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
@@ -120,7 +120,7 @@ impl Chip8 {
     // If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
     pub(super) fn exec_8xy6(&mut self, x: usize) {
         self.v_registers[0x0F] = self.v_registers[x] & 1;
-        self.v_registers[x] = self.v_registers[x] >> 1;
+        self.v_registers[x] >>= 1;
     }
 
     // If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
@@ -137,7 +137,7 @@ impl Chip8 {
 
     // If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
     pub(super) fn exec_8xye(&mut self, x: usize) {
-        self.v_registers[0x0F] = (self.v_registers[x] & 0b10000000) >> 7;
+        self.v_registers[0x0F] = (self.v_registers[x] & 0b1000_0000) >> 7;
         self.v_registers[x] <<= 1;
         // let mut val = self.v_registers[x] as u8;
         // val &= 0xF0;
@@ -173,7 +173,7 @@ impl Chip8 {
     pub(super) fn exec_cxkk(&mut self, x: usize, kk: u8) {
         let mut rand_num: u8 = random();
         rand_num &= kk;
-        self.v_registers[x] = self.v_registers[x] & rand_num;
+        self.v_registers[x] &= rand_num;
     }
 
     // The interpreter reads n bytes from memory, starting at the address stored in I.

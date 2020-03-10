@@ -52,7 +52,7 @@ impl Screen {
 
                 Ok(Screen { canvas: canv })
             }
-            Err(e) => return Err(format!("can't create canvas: {}", e)),
+            Err(e) => Err(format!("can't create canvas: {}", e)),
         }
     }
 }

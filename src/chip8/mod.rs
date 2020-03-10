@@ -1,5 +1,4 @@
 pub mod chip_8_main_loop;
-pub mod cpu;
 pub struct Chip8 {
     stack: [u16; 16],
     sp: usize,
@@ -48,16 +47,16 @@ static CHIP8_FONTSET: [u8; 80] = [
 
 impl Chip8 {
     pub fn new() -> Chip8 {
-        let mut memory = [0u8; 4096];
+        let mut mem = [0u8; 4096];
         for (i, &byte) in CHIP8_FONTSET.iter().enumerate() {
-            memory[i] = byte;
+            mem[i] = byte;
         }
         Chip8 {
             pc: 0x200,
             opcode: 0,
             i_reg: 0,
             sp: 0,
-            memory: memory,
+            memory: mem,
             v_registers: [0; 16],
             stack: [0; 16],
             delay_timer: 0,

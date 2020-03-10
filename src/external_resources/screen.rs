@@ -20,7 +20,7 @@ impl super::Screen {
                     .or_else(|e| Err(format!("cannot draw rectangle: {}", e)))?;
             }
         }
-        Ok(self.canvas.present())
+        Ok(())
     }
 }
 

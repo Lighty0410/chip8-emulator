@@ -14,27 +14,24 @@ impl super::Chip8 {
         self.resources.key = keyboard;
         self.fontset_is_changed = false;
 
-        match self.resources.is_key_waiting {
-            true => {
-                for (i, &valid_key) in self.resources.key.iter().enumerate() {
-                    if valid_key {
-                        self.resources.is_key_waiting = false;
-                        self.v_registers[self.resources.key_value as usize] = i as u8;
-                    }
+        if self.resources.is_key_waiting {
+            for (i, &valid_key) in self.resources.key.iter().enumerate() {
+                if valid_key {
+                    self.resources.is_key_waiting = false;
+                    self.v_registers[self.resources.key_value as usize] = i as u8;
                 }
             }
-            false => {
-                if self.delay_timer > 0 {
-                    self.delay_timer -= 1;
-                }
-                if self.sound_timer > 0 {
-                    self.sound_timer -= 1;
-                }
-                self.fetch_opcode();
-                let nib = self.decode_opcode();
-                self.execute_opcode(&nib);
+        } else {
+            if self.delay_timer > 0 {
+                self.delay_timer -= 1;
             }
-        };
+            if self.sound_timer > 0 {
+                self.sound_timer -= 1;
+            }
+            self.fetch_opcode();
+            let nib = self.decode_opcode();
+            self.execute_opcode(&nib);
+        }
         if !self.fontset_is_changed {
             None
         } else {
@@ -87,11 +84,11 @@ impl super::Chip8 {
                 is_jumped = true;
             }
             (0x1, _, _, _) => {
-                self.exec_1nnn(&nib.nnn);
+                self.exec_1nnn(nib.nnn);
                 is_jumped = true;
             }
             (0x2, _, _, _) => {
-                self.exec_2nnn(&nib.nnn);
+                self.exec_2nnn(nib.nnn);
                 is_jumped = true;
             }
             (0x3, _, _, _) => self.exec_3xkk(nib.x, nib.kk),

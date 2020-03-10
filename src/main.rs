@@ -18,7 +18,7 @@ fn gen_env() -> Option<String> {
 }
 
 fn main() -> Result<(), String> {
-    let cartridge_filename = gen_env().ok_or("incorrect file path".to_string())?;
+    let cartridge_filename = gen_env().ok_or_else(|| "incorrect file path".to_string())?;
 
     let rom =
         rom::read_rom(&cartridge_filename).or_else(|e| Err(format!("cannot read file: {}", e)))?;
@@ -33,13 +33,9 @@ fn main() -> Result<(), String> {
 
     while let Ok(keypad) = input.poll() {
         let tick = cpu.tick(keypad);
-        match tick {
-            Some(val) => {
-                screen.draw(val)?;
-            }
-            None => (),
-        };
-
+        if let Some(val) = tick {
+            screen.draw(val)?;
+        }
         thread::sleep(Duration::from_millis(2));
     }
 
